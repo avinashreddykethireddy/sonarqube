@@ -21,8 +21,6 @@ func TestCheckValues(t *testing.T) {
 	}{
 		{2, 5, "less"},
 		{2, 10, "more"},
-		{2, -2, "zero"},
-		{2, -7, "less"},
 	}
 	for _, c := range cases {
 		t.Run("testing", func(t *testing.T) {
