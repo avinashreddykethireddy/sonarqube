@@ -1,5 +1,10 @@
 name: Quality
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
 jobs:
   test:
     name: Test with Coverage
@@ -17,7 +22,7 @@ jobs:
 #          go mod download
       - name: Run Unit tests
         run: |
-          go test -coverprofile=./coverage.txt ./...
+          go test -coverprofile=./coverage.out ./...
 #      - name: Run Gosec Security Scanner
 #        run: |
 #          go install github.com/securego/gosec/v2/cmd/gosec@latest
@@ -27,3 +32,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#        with:
+#          args: >
+#            -Dsonar.pullrequest.key=${{ github.event.number }}
+#            -Dsonar.pullrequest.branch=${{ github.HEAD_REF }}
+#            -Dsonar.pullrequest.base=${{ github.BASE_REF }}
+#            -Dsonar.pullrequest.github.repository=${{ github.repository }}
+#            -Dsonar.scm.provider=git
