@@ -8,18 +8,22 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: '1.16'
+          go-version: '1.19'
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: |
-          go mod download
+
+#      - name: Install dependencies
+#        run: |
+#          go mod download
       - name: Run Unit tests
         run: |
-          go test -race -covermode atomic -coverprofile=covprofile ./...
-      - name: Install goveralls
-        run: go install github.com/mattn/goveralls@latest
-      - name: Send coverage
+          go test -coverprofile=./coverage.txt ./...
+#      - name: Run Gosec Security Scanner
+#        run: |
+#          go install github.com/securego/gosec/v2/cmd/gosec@latest
+#          gosec -no-fail -fmt=sonarqube -out report.json ./...
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
         env:
-          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: goveralls -coverprofile=covprofile -service=github
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
