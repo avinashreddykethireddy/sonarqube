@@ -1,48 +1,34 @@
-#name: Quality
-#on:
-#  push:
-#    branches:
-#      - '**/**'
-#  pull_request:
-#    paths:
-#      - 'subber/**'
-#      - 'go.mod'
-#jobs:
-#  test:
-#    name: subber
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Set up Go
-#        uses: actions/setup-go@v2
-#        with:
-#          go-version: '1.16'
-#      - name: Check out code
-#        uses: actions/checkout@v2
-#      - name: Install dependencies
-#        run: |
-#          go mod download
-#      - name: Run Unit tests
-#        run: |
-#          go test -race -covermode atomic -coverprofile=coverage ./subber/...
-#      - name: install goveralls & send coverage
-#        env:
-#          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          COVERALLS_PARALLEL: true
-#          COVERALLS_FLAG_NAME: 'Subber'
-#        run: |
-#          go install github.com/mattn/goveralls@latest
-#          goveralls -coverprofile=coverage -service=github
-#  finish:
-#    needs: test
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Coveralls Finished
-#        run: curl "https://coveralls.io/webhook?repo_token=${{ secrets.GITHUB_TOKEN }}&repo_name=${{ github.repository }}" -d "payload[build_num]=${{ github.run_id }}&payload[status]=done"
-#
-##      - name: install goveralls & send coverage
-##        env:
-##          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-##          COVERALLS_PARALLEL: true
-##        run: |
-##          go install github.com/mattn/goveralls@latest
-##          goveralls -coverprofile=coverage -service=github -flagname="subber"
+name: Quality
+on:
+  push:
+    branches:
+      - '**/**'
+  pull_request:
+    paths:
+      - 'subber/**'
+      - 'go.mod'
+jobs:
+  test:
+    name: subber
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: |
+          go mod download
+      - name: Run Unit tests
+        run: |
+          go test -race -covermode atomic -coverprofile=coverage ./subber/...
+      - name: install goveralls & send coverage
+        env:
+          COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: 'Subber'
+        run: |
+          go install github.com/mattn/goveralls@latest
+          goveralls -coverprofile=coverage -service=github
