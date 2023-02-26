@@ -1,0 +1,10 @@
+name: Quality
+on: [push, pull_request]
+jobs:
+  finish:
+    if: ${{ github.event.label.name == 'runworkflow' }}
+    name: coveralls merge all reports
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        run: curl "https://coveralls.io/webhook?repo_token=${{ secrets.GITHUB_TOKEN }}&repo_name=${{ github.repository }}" -d "payload[build_num]=${{ github.run_id }}&payload[status]=done"
